@@ -46,9 +46,72 @@
         </div>
     </main>
 
-    <!-- The script remains the same as the previous version -->
     <script>
-        // ... (No changes needed here, just copy from your last version)
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. DEFINE ALL ELEMENTS ---
+            const video = document.getElementById('background-video');
+            const card = document.querySelector('.business-card');
+            const particleContainer = document.getElementById('particle-container');
+
+            // --- 2. VIDEO & AUDIO LOGIC ---
+            video.muted = false;
+            video.classList.add('video-fade-in');
+            const targetVolume = 0.4;
+            video.volume = 0;
+            const fadeAudio = setInterval(() => {
+                if (video.volume < targetVolume) {
+                    video.volume = Math.min(targetVolume, video.volume + 0.01);
+                } else {
+                    clearInterval(fadeAudio);
+                }
+            }, 150);
+
+            // --- 3. PARTICLE EFFECT LOGIC ---
+            function createParticle(type) {
+                const particle = document.createElement('div');
+                particle.classList.add(type);
+                particle.style.left = Math.random() * 100 + 'vw';
+                const duration = (type === 'snow') ? (Math.random() * 5 + 5) : (Math.random() * 0.5 + 0.5);
+                particle.style.animationDuration = duration + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particleContainer.appendChild(particle);
+                setTimeout(() => { particle.remove(); }, (duration + 5) * 1000);
+            }
+            // Generate initial snow
+            for(let i = 0; i < 20; i++) { createParticle('snow'); }
+            // Keep generating snow
+            setInterval(() => createParticle('snow'), 250);
+
+            // Repopulate snow when tabbing back to the page
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden === false) {
+                    particleContainer.innerHTML = '';
+                    for(let i = 0; i < 20; i++) { createParticle('snow'); }
+                }
+            });
+
+            // --- 4. SCREENSAVER MOVEMENT LOGIC ---
+            let x = (window.innerWidth - card.offsetWidth) / 2;
+            let y = (window.innerHeight - card.offsetHeight) / 2;
+            let dx = 0.5; // Horizontal speed
+            let dy = 0.5; // Vertical speed
+            let isPaused = false;
+            
+            function animate() {
+                if (!isPaused) {
+                    x += dx; y += dy;
+                    if (x + card.offsetWidth > window.innerWidth || x < 0) { dx = -dx; }
+                    if (y + card.offsetHeight > window.innerHeight || y < 0) { dy = -dy; }
+                    card.style.transform = `translate(${x}px, ${y}px)`;
+                }
+                requestAnimationFrame(animate);
+            }
+            // Start the animation
+            animate();
+            
+            card.addEventListener('mouseenter', () => { isPaused = true; });
+            card.addEventListener('mouseleave', () => { isPaused = false; });
+        });
     </script>
 </body>
 </html>
