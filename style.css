@@ -55,18 +55,20 @@ body {
 }
 
 .name {
-    font-size: 2rem;
+    font-size: 1.8rem; /* Adjusted for longer name */
     font-weight: 700;
     color: var(--text-primary);
+    line-height: 1.2;
 }
 
-.tagline {
+.nickname {
     font-size: 1rem;
     font-weight: 400;
     color: var(--text-secondary);
+    font-style: italic;
 }
 
-/* --- Primary Call to Action Button (Discord) --- */
+/* --- Primary Call to Action Button --- */
 .cta-button {
     display: block;
     width: 100%;
@@ -82,10 +84,10 @@ body {
 
 .cta-button:hover {
     transform: scale(1.05);
-    background-color: #6370f3; /* Slightly lighter on hover */
+    background-color: #6370f3;
 }
 
-.cta-button .fa-discord {
+.cta-button i {
     margin-right: 10px;
 }
 
@@ -101,7 +103,7 @@ body {
     list-style: none;
     display: flex;
     justify-content: center;
-    gap: 25px; /* Space between icons */
+    gap: 30px; /* Increased gap for better spacing */
 }
 
 .social-links a {
