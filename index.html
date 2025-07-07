@@ -4,52 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>944 cultist | haunt.gg</title>
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome (for icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <!-- Your Custom Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- VIDEO BACKGROUND ELEMENT -->
+    <video id="background-video" autoplay loop muted playsinline>
+        <source src="background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
     <main class="business-card">
-        
         <div class="card-header">
-            <!-- This line will now find your image if it's named and placed correctly -->
             <img src="profile.jpg" alt="Profile Picture" class="profile-pic">
             <h1 class="name">944 cultist</h1>
             <p class="nickname">(jerk)</p>
         </div>
-
-        <!-- The link is your original Discord invite -->
         <a href="https://discord.gg/qD4mcpYmWa" target="_blank" rel="noopener noreferrer" class="cta-button">
             <i class="fas fa-church"></i>
             Join the cult
         </a>
-
         <hr class="divider">
-
-        <!-- THIS SECTION IS NOW CORRECTED TO INCLUDE ROBLOX -->
         <div class="social-links">
             <ul>
-                <!-- Link to your GitHub -->
                 <li><a href="https://github.com/your-github" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a></li>
-                
-                <!-- Link to your Discord User Profile -->
                 <li><a href="https://discordapp.com/users/1207719504310964247" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a></li>
-                
-                <!-- Link to your Roblox Profile -->
                 <li><a href="https://www.roblox.com/users/4204242/profile" target="_blank" aria-label="Roblox"><i class="fab fa-roblox"></i></a></li>
             </ul>
         </div>
-
     </main>
+
+    <!-- JAVASCRIPT FOR THE FADE-IN EFFECTS -->
+    <script>
+        // Wait until the page content is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('background-video');
+            const card = document.querySelector('.business-card');
+
+            // --- 1. Fade in the video visually ---
+            // Add a class that triggers the CSS transition for opacity
+            video.classList.add('video-fade-in');
+
+            // --- 2. Fade in the audio smoothly ---
+            // Set your desired final volume (0.0 to 1.0)
+            const targetVolume = 0.4; // 40% volume is a good, non-jarring level
+            video.volume = 0; // Start at 0
+
+            const fadeAudio = setInterval(() => {
+                // Increase volume by a small step
+                if (video.volume < targetVolume) {
+                    video.volume = Math.min(targetVolume, video.volume + 0.01);
+                } else {
+                    // When target volume is reached, stop the interval
+                    clearInterval(fadeAudio);
+                }
+            }, 100); // This interval runs every 100ms
+        });
+    </script>
 
 </body>
 </html>
