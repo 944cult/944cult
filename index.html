@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- NEW: Click to Enter Overlay -->
+
     <div id="entry-overlay">
         <div class="entry-content">
             <h1>Enter</h1>
@@ -24,6 +24,7 @@
         <source src="background.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+
     <main class="business-card">
         <div class="card-header">
             <img src="profile.jpg" alt="Profile Picture" class="profile-pic">
@@ -39,61 +40,103 @@
             <ul>
                 <li><a href="https://github.com/your-github" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a></li>
                 <li><a href="https://discordapp.com/users/1207719504310964247" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a></li>
-                <li><a href="https://www.roblox.com/users/4204242/profile" target="_blank" aria-label="Roblox"><i class="fab fa-roblox"></i></a></li>
+                <li>
+                    <a href="https://www.roblox.com/users/4204242/profile" target="_blank" aria-label="Roblox">
+                        <i class="fab fa-roblox"></i>
+                    </a>
+                </li>
             </ul>
         </div>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Elements ---
             const entryOverlay = document.getElementById('entry-overlay');
             const video = document.getElementById('background-video');
             const card = document.querySelector('.business-card');
             const particleContainer = document.getElementById('particle-container');
 
+            // --- State Variables ---
+            let x, y, dx = 0.5, dy = 0.5;
+            let isPaused = false;
+            
             function startExperience() {
-                // 1. Hide the overlay
+                // 1. HIDE OVERLAY & SHOW CONTENT
                 entryOverlay.classList.add('hidden');
-
-                // 2. Unmute the video and start fade-in (now safe because of the click)
-                video.muted = false;
+                card.classList.add('visible');
                 video.classList.add('video-fade-in');
-                const targetVolume = 0.4;
+
+                // 2. SAFELY START AUDIO
+                video.muted = false;
                 video.volume = 0;
+                const targetVolume = 0.4;
                 const fadeAudio = setInterval(() => {
                     if (video.volume < targetVolume) {
                         video.volume = Math.min(targetVolume, video.volume + 0.01);
                     } else { clearInterval(fadeAudio); }
                 }, 150);
 
-                // 3. Start all other animations
-                card.classList.add('visible'); // Fade in the card
+                // 3. INITIALIZE ANIMATIONS
+                x = (window.innerWidth - card.offsetWidth) / 2;
+                y = (window.innerHeight - card.offsetHeight) / 2;
                 
-                function createParticle(type) { /* ... particle logic ... */ }
-                for (let i = 0; i < 20; i++) createParticle('snow');
-                setInterval(() => createParticle('snow'), 250);
-                
-                let x = (window.innerWidth - card.offsetWidth) / 2; let y = (window.innerHeight - card.offsetHeight) / 2; let dx = 0.5; let dy = 0.5; let isPaused = false;
-                function createGhostTrail() { /* ... trail logic ... */ }
-                function animate() { /* ... animation logic ... */ }
-                
-                setInterval(createGhostTrail, 100);
-                animate();
+                startSnow();
+                animate(); // Start screensaver
+                setInterval(createGhostTrail, 100); // Start trail
 
                 card.addEventListener('mouseenter', () => { isPaused = true; });
                 card.addEventListener('mouseleave', () => { isPaused = false; });
             }
 
-            // Listen for the first click on the overlay
+            // Listen for the one-time click
             entryOverlay.addEventListener('click', startExperience, { once: true });
+            
+            // --- Animation & Effect Functions ---
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'snow';
+                particle.style.left = Math.random() * 100 + 'vw';
+                const duration = Math.random() * 5 + 5;
+                particle.style.animationDuration = duration + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particleContainer.appendChild(particle);
+                setTimeout(() => particle.remove(), (duration + 5) * 1000);
+            }
 
-            // (The rest of the logic has been moved inside startExperience)
+            function startSnow() {
+                for (let i = 0; i < 20; i++) createParticle();
+                setInterval(createParticle, 250);
+                document.addEventListener('visibilitychange', () => {
+                    if (!document.hidden) {
+                        particleContainer.innerHTML = '';
+                        for (let i = 0; i < 20; i++) createParticle();
+                    }
+                });
+            }
+
+            function createGhostTrail() {
+                if (isPaused) return;
+                const ghost = document.createElement('div');
+                ghost.className = 'ghost-trail';
+                ghost.style.width = card.offsetWidth + 'px';
+                ghost.style.height = card.offsetHeight + 'px';
+                ghost.style.transform = `translate(${x}px, ${y}px)`;
+                document.body.appendChild(ghost);
+                setTimeout(() => ghost.style.opacity = '0', 50);
+                setTimeout(() => ghost.remove(), 1000);
+            }
+
+            function animate() {
+                if (!isPaused) {
+                    x += dx; y += dy;
+                    if (x + card.offsetWidth >= window.innerWidth || x <= 0) dx = -dx;
+                    if (y + card.offsetHeight >= window.innerHeight || y <= 0) dy = -dy;
+                    card.style.transform = `translate(${x}px, ${y}px)`;
+                }
+                requestAnimationFrame(animate);
+            }
         });
-
-        // The full functions that were moved
-        function createParticle(type) { const particle = document.createElement('div'); particle.classList.add(type); particle.style.left = Math.random() * 100 + 'vw'; const duration = (type === 'snow') ? (Math.random() * 5 + 5) : (Math.random() * 0.5 + 0.5); particle.style.animationDuration = duration + 's'; particle.style.animationDelay = Math.random() * 5 + 's'; document.getElementById('particle-container').appendChild(particle); setTimeout(() => { particle.remove(); }, (duration + 5) * 1000); }
-        function createGhostTrail() { const card = document.querySelector('.business-card'); let x = parseFloat(card.style.transform.split('(')[1]); let y = parseFloat(card.style.transform.split(',')[1]); if (document.querySelector('.business-card:hover')) return; const ghost = document.createElement('div'); ghost.className = 'ghost-trail'; ghost.style.width = card.offsetWidth + 'px'; ghost.style.height = card.offsetHeight + 'px'; ghost.style.transform = `translate(${x}px, ${y}px)`; document.body.appendChild(ghost); setTimeout(() => { ghost.style.opacity = '0'; }, 50); setTimeout(() => { ghost.remove(); }, 1000); }
-        function animate() { const card = document.querySelector('.business-card'); let x = parseFloat(card.style.transform.split('(')[1] || (window.innerWidth - card.offsetWidth) / 2); let y = parseFloat(card.style.transform.split(',')[1] || (window.innerHeight - card.offsetHeight) / 2); let dx = 0.5; let dy = 0.5; if (!document.querySelector('.business-card:hover')) { x += dx; y += dy; if (x + card.offsetWidth > window.innerWidth || x < 0) dx = -dx; if (y + card.offsetHeight > window.innerHeight || y < 0) dy = -dy; card.style.transform = `translate(${x}px, ${y}px)`; } requestAnimationFrame(animate); }
     </script>
 </body>
 </html>
