@@ -1,74 +1,64 @@
 /* --- Video Background --- */
 #background-video {
-    position: fixed; /* Fixes the video to the viewport */
+    position: fixed;
     right: 0;
     bottom: 0;
     min-width: 100%;
     min-height: 100%;
-    z-index: -1; /* Pushes the video behind all other content */
-    object-fit: cover; /* Ensures the video covers the screen without distortion */
-    opacity: 0; /* Start fully transparent */
-    transition: opacity 2s ease-in-out; /* Define the fade-in duration */
+    z-index: -1;
+    object-fit: cover;
+    opacity: 0;
+    /* SLOWER FADE-IN */
+    transition: opacity 3s ease-in-out;
 }
 
 #background-video.video-fade-in {
-    opacity: 1; /* The state to transition to */
+    opacity: 1;
 }
 
+/* --- THEME COLORS (NOW LIGHT MODE / RED) --- */
+:root {
+    --primary-color: #e63946; /* A strong red */
+    --card-bg: #FFFFFF;      /* White card */
+    --text-primary: #1D3557; /* Dark blue text */
+    --text-secondary: #457B9D; /* Lighter blue/gray text */
+    --border-color: #f1f1f1;   /* Light gray border */
+}
 
 /* --- Base Setup --- */
-:root {
-    --primary-color: #5865F2; /* Discord Blue */
-    --card-bg: #1A1A1A;
-    --body-bg: #111111;
-    --text-primary: #F0F0F0;
-    --text-secondary: #A0A0A0;
-    --border-color: #2C2C2C;
-}
-
-/* The rest of your CSS remains the same... */
-/* --- Base Setup --- */
-:root {
-    --primary-color: #5865F2; /* Discord Blue */
-    --card-bg: #1A1A1A;
-    --body-bg: #111111;
-    --text-primary: #F0F0F0;
-    --text-secondary: #A0A0A0;
-    --border-color: #2C2C2C;
-}
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* --- BACKGROUND FIX & CENTERING --- */
+/* The main problem was `display: flex` here, which put the video and card side-by-side. */
+/* Using `display: grid` is a modern way to perfectly center the card on top. */
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--body-bg);
-    color: var(--text-primary);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
     padding: 20px;
-    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="28" height="49" viewBox="0 0 28 49"%3E%3Cg fill-rule="evenodd"%3E%3Cg id="hexagons" fill="%231a1a1a" fill-opacity="0.4" fill-rule="nonzero"%3E%3Cpath d="M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.99-7.5L26 15v19L13 41.5 0 34V15z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+    display: grid;
+    place-items: center; /* This perfectly centers the .business-card */
 }
 
 /* --- The Business Card --- */
 .business-card {
     background-color: var(--card-bg);
+    color: var(--text-primary);
     border-radius: 16px;
     border: 1px solid var(--border-color);
     padding: 35px;
     width: 100%;
     max-width: 380px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px #222;
-    animation: fadeIn 1s ease-out;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    /* SLOWER FADE-IN */
+    animation: fadeIn 2.5s ease-out;
 }
 
-/* --- Card Header & Profile Pic --- */
+/* Card Header & Profile Pic */
 .card-header {
     margin-bottom: 25px;
 }
@@ -80,11 +70,11 @@ body {
     border: 3px solid var(--primary-color);
     object-fit: cover;
     margin-bottom: 15px;
-    box-shadow: 0 0 15px rgba(88, 101, 242, 0.3);
+    box-shadow: 0 0 15px rgba(230, 57, 70, 0.3);
 }
 
 .name {
-    font-size: 1.8rem; /* Adjusted for longer name */
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.2;
@@ -103,7 +93,7 @@ body {
     width: 100%;
     padding: 15px;
     background-color: var(--primary-color);
-    color: #fff;
+    color: #fff; /* Ensure text is white for contrast */
     text-decoration: none;
     font-size: 1.1rem;
     font-weight: 600;
@@ -113,14 +103,14 @@ body {
 
 .cta-button:hover {
     transform: scale(1.05);
-    background-color: #6370f3;
+    background-color: #f7525f; /* Lighter red on hover */
 }
 
 .cta-button i {
     margin-right: 10px;
 }
 
-/* --- Divider & Social Links --- */
+/* Divider & Social Links */
 .divider {
     border: 0;
     height: 1px;
@@ -132,7 +122,7 @@ body {
     list-style: none;
     display: flex;
     justify-content: center;
-    gap: 30px; /* Increased gap for better spacing */
+    gap: 30px;
 }
 
 .social-links a {
@@ -150,7 +140,7 @@ body {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
