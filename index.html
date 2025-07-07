@@ -11,102 +11,74 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="particle-container"></div>
-    
     <video id="background-video" autoplay loop muted playsinline>
         <source src="background.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-
     <main class="business-card">
         <div class="card-header">
             <img src="profile.jpg" alt="Profile Picture" class="profile-pic">
             <h1 class="name">944 cultist</h1>
         </div>
-        
         <div class="actions-group">
             <a href="https://discord.gg/qD4mcpYmWa" target="_blank" rel="noopener noreferrer" class="cta-button">
-                <i class="fas fa-church"></i>
-                Join the cult
+                <i class="fas fa-church"></i>Join the cult
             </a>
             <a href="https://haunt.gg/jerk" target="_blank" rel="noopener noreferrer" class="secondary-link">haunt.gg/jerk</a>
         </div>
-        
         <div class="social-links">
             <ul>
                 <li><a href="https://github.com/your-github" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a></li>
                 <li><a href="https://discordapp.com/users/1207719504310964247" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a></li>
                 <li>
                     <a href="https://www.roblox.com/users/4204242/profile" target="_blank" aria-label="Roblox">
-                        <svg class="custom-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22.5C6.201 22.5 1.5 17.799 1.5 12S6.201 1.5 12 1.5s10.5 4.701 10.5 10.5S17.799 22.5 12 22.5zM17.167 5.312L6.833 19.188l1.667-2.75L19.833 4.812zm-1.667 1.667l-2.083-3.334L8.75 15.25l2.083 3.334z"/></svg>
+                        <!-- NEW, BETTER ROBLOX ICON SVG -->
+                        <svg class="custom-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 0A256 256 0 1 0 256 512A256 256 0 1 0 256 0zM128 384l64-256 128 64-64 256-128-64z"/></svg>
                     </a>
                 </li>
             </ul>
         </div>
     </main>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- 1. DEFINE ALL ELEMENTS ---
-            const video = document.getElementById('background-video');
-            const card = document.querySelector('.business-card');
-            const particleContainer = document.getElementById('particle-container');
-
-            // --- 2. VIDEO & AUDIO LOGIC ---
-            video.muted = false;
-            video.classList.add('video-fade-in');
-            const targetVolume = 0.4;
-            video.volume = 0;
-            const fadeAudio = setInterval(() => {
-                if (video.volume < targetVolume) {
-                    video.volume = Math.min(targetVolume, video.volume + 0.01);
-                } else {
-                    clearInterval(fadeAudio);
-                }
-            }, 150);
-
-            // --- 3. PARTICLE EFFECT LOGIC ---
-            function createParticle(type) {
-                const particle = document.createElement('div');
-                particle.classList.add(type);
-                particle.style.left = Math.random() * 100 + 'vw';
-                const duration = (type === 'snow') ? (Math.random() * 5 + 5) : (Math.random() * 0.5 + 0.5);
-                particle.style.animationDuration = duration + 's';
-                particle.style.animationDelay = Math.random() * 5 + 's';
-                particleContainer.appendChild(particle);
-                setTimeout(() => { particle.remove(); }, (duration + 5) * 1000);
-            }
-            // Generate initial snow
-            for(let i = 0; i < 20; i++) { createParticle('snow'); }
-            // Keep generating snow
+            const video = document.getElementById('background-video'); const card = document.querySelector('.business-card'); const particleContainer = document.getElementById('particle-container');
+            video.muted = false; video.classList.add('video-fade-in'); const targetVolume = 0.4; video.volume = 0;
+            const fadeAudio = setInterval(() => { if (video.volume < targetVolume) { video.volume = Math.min(targetVolume, video.volume + 0.01); } else { clearInterval(fadeAudio); } }, 150);
+            function createParticle(type) { const particle = document.createElement('div'); particle.classList.add(type); particle.style.left = Math.random() * 100 + 'vw'; const duration = (type === 'snow') ? (Math.random() * 5 + 5) : (Math.random() * 0.5 + 0.5); particle.style.animationDuration = duration + 's'; particle.style.animationDelay = Math.random() * 5 + 's'; particleContainer.appendChild(particle); setTimeout(() => { particle.remove(); }, (duration + 5) * 1000); }
+            for(let i=0; i<20; i++) createParticle('snow');
             setInterval(() => createParticle('snow'), 250);
-
-            // Repopulate snow when tabbing back to the page
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden === false) {
-                    particleContainer.innerHTML = '';
-                    for(let i = 0; i < 20; i++) { createParticle('snow'); }
-                }
-            });
-
-            // --- 4. SCREENSAVER MOVEMENT LOGIC ---
-            let x = (window.innerWidth - card.offsetWidth) / 2;
-            let y = (window.innerHeight - card.offsetHeight) / 2;
-            let dx = 0.5; // Horizontal speed
-            let dy = 0.5; // Vertical speed
-            let isPaused = false;
+            document.addEventListener('visibilitychange', () => { if (document.hidden === false) { particleContainer.innerHTML = ''; for(let i=0; i<20; i++) createParticle('snow'); } });
             
+            // --- REWRITTEN SCREENSAVER & TRAIL LOGIC ---
+            let x = (window.innerWidth - card.offsetWidth) / 2; let y = (window.innerHeight - card.offsetHeight) / 2; let dx = 0.5; let dy = 0.5; let isPaused = false;
+            
+            function createGhostTrail() {
+                if (isPaused) return;
+                const ghost = document.createElement('div');
+                ghost.className = 'ghost-trail';
+                ghost.style.width = card.offsetWidth + 'px';
+                ghost.style.height = card.offsetHeight + 'px';
+                ghost.style.transform = `translate(${x}px, ${y}px)`;
+                document.body.appendChild(ghost);
+                
+                // Trigger the fade out animation
+                setTimeout(() => { ghost.style.opacity = '0'; }, 50);
+                // Remove the element from the DOM after it has faded out
+                setTimeout(() => { ghost.remove(); }, 1000);
+            }
+
             function animate() {
                 if (!isPaused) {
                     x += dx; y += dy;
-                    if (x + card.offsetWidth > window.innerWidth || x < 0) { dx = -dx; }
-                    if (y + card.offsetHeight > window.innerHeight || y < 0) { dy = -dy; }
+                    if (x + card.offsetWidth > window.innerWidth || x < 0) dx = -dx;
+                    if (y + card.offsetHeight > window.innerHeight || y < 0) dy = -dy;
                     card.style.transform = `translate(${x}px, ${y}px)`;
                 }
                 requestAnimationFrame(animate);
             }
-            // Start the animation
+            // Create a new trail element every 100ms
+            setInterval(createGhostTrail, 100);
             animate();
             
             card.addEventListener('mouseenter', () => { isPaused = true; });
