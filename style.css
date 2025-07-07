@@ -1,71 +1,85 @@
-/* --- Particle Effects --- */
+/* --- Particle Effects (Bigger & Better Movement) --- */
 #particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: hidden; }
-.rain, .snow { position: absolute; top: -20px; animation: fall linear infinite; }
-.rain { width: 1px; height: 15px; background: linear-gradient(to bottom, rgba(230, 57, 70, 0), rgba(230, 57, 70, 0.8)); }
-.snow { width: 5px; height: 5px; background-color: rgba(255, 255, 255, 0.8); border-radius: 50%; box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
-@keyframes fall { to { transform: translateY(105vh); } }
+
+.rain, .snow { position: absolute; top: -20px; }
+
+.rain {
+    width: 2px; /* Bigger */
+    height: 20px; /* Bigger */
+    background: linear-gradient(to bottom, rgba(230, 57, 70, 0), rgba(230, 57, 70, 0.8));
+    animation: fall linear infinite;
+}
+
+.snow {
+    width: 8px; /* Bigger */
+    height: 8px; /* Bigger */
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    animation: swayAndFall linear infinite; /* NEW drifting animation */
+}
+
+@keyframes fall {
+    to { transform: translateY(105vh); }
+}
+
+@keyframes swayAndFall {
+    0% { transform: translateY(-20px) translateX(0); }
+    50% { transform: translateX(80px); }
+    100% { transform: translateY(105vh) translateX(-80px); }
+}
 
 /* --- Video Background --- */
 #background-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; opacity: 0; transition: opacity 3s ease-in-out; }
 #background-video.video-fade-in { opacity: 1; }
 
-/* --- THEME COLORS (NOW BLACK TEXT) --- */
+/* --- Theme Colors (Black Text) --- */
 :root {
-    --primary-color: #e63946; /* Red */
+    --primary-color: #e63946;   /* Red */
     --card-bg: #FFFFFF;
-    --text-primary: #000000;  /* Black text */
-    --text-secondary: #000000; /* Black icons */
+    --text-primary: #000000;    /* Black text */
+    --text-secondary: #000000;  /* Black icons/secondary text */
     --border-color: #f1f1f1;
 }
 
 /* --- Base Setup --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; min-height: 100vh; overflow: hidden; /* Hide scrollbars caused by moving card */ }
+body { font-family: 'Inter', sans-serif; min-height: 100vh; overflow: hidden; }
 
-/* --- The Business Card (FOR SCREENSAVER) --- */
+/* --- Business Card (For Screensaver) --- */
 .business-card {
-    position: absolute; /* Crucial for screensaver movement */
-    top: 0; left: 0; /* JS will control position via transform */
+    position: absolute; top: 0; left: 0;
     background-color: var(--card-bg);
     color: var(--text-primary);
     border-radius: 16px;
     padding: 35px;
-    width: 100%;
-    max-width: 380px;
+    width: 100%; max-width: 380px;
     text-align: center;
     box-shadow: 0 0 35px rgba(230, 57, 70, 0.35);
     z-index: 1;
     animation: fadeIn 2.5s ease-out;
 }
 
-/* Profile Pic */
+/* Profile Pic, Name, Nickname */
 .profile-pic { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary-color); object-fit: cover; margin-bottom: 15px; }
 .name { font-size: 1.8rem; font-weight: 700; line-height: 1.2; }
-.nickname { font-size: 1rem; font-weight: 400; font-style: italic; }
+.nickname { font-size: 1rem; font-weight: 400; font-style: italic; color: var(--text-secondary); }
 
 /* Button & New Link */
 .cta-button { display: block; width: 100%; padding: 15px; background-color: var(--primary-color); color: #fff; text-decoration: none; font-size: 1.1rem; font-weight: 600; border-radius: 8px; transition: transform 0.2s ease, background-color 0.2s ease; }
 .cta-button:hover { transform: scale(1.05); background-color: #f7525f; }
 .cta-button i { margin-right: 10px; }
-
-.secondary-link {
-    display: block;
-    margin-top: 15px;
-    font-size: 0.9rem;
-    color: var(--text-primary);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
+.secondary-link { display: block; margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
 .secondary-link:hover { color: var(--primary-color); }
 
 /* Divider & Social Links */
 .divider { border: 0; height: 1px; background-color: var(--border-color); margin: 25px 0; }
 .social-links ul { list-style: none; display: flex; justify-content: center; gap: 30px; align-items: center; }
-.social-links a { color: var(--text-secondary); font-size: 1.5rem; transition: color 0.2s ease, transform 0.2s ease; display: inline-block; }
-.social-links a:hover { color: var(--primary-color); transform: translateY(-3px); }
+.social-links a { color: var(--text-secondary); font-size: 1.5rem; transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
+.social-links a:hover, .social-links a:hover .custom-icon { color: var(--primary-color); transform: translateY(-3px); filter: invert(35%) sepia(87%) saturate(2474%) hue-rotate(335deg) brightness(94%) contrast(91%); }
 
 /* Custom icon styling */
-.custom-icon { width: 1.5rem; height: 1.5rem; }
+.custom-icon { width: 1.5rem; height: 1.5rem; transition: filter 0.2s ease; }
 
 /* Animation */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
