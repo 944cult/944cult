@@ -38,9 +38,10 @@ body { font-family: 'Inter', sans-serif; min-height: 100vh; overflow: hidden; ba
 
 /* --- Custom Icon Styling --- */
 .custom-icon {
-    width: 1.3rem;   /* Matches the font-size of the other icons */
-    height: 1.3rem;  /* Matches the font-size of the other icons */
-    fill: currentColor; /* This is the key: it makes the SVG take the color of its parent link */
+    width: 1.3rem;
+    height: 1.3rem;
+    fill: currentColor; /* This makes the SVG black, then white on hover */
+    transition: all 0.3s ease;
 }
 
 /* --- Profile Pic with Pure Red Glow --- */
