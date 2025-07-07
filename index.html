@@ -31,7 +31,7 @@
             Join the cult
         </a>
         
-        <!-- NEW CLICKABLE LINK -->
+        <!-- Clickable link, now visible -->
         <a href="#" class="secondary-link">haunt.gg/jerk</a>
 
         <hr class="divider">
@@ -41,9 +41,9 @@
                 <li><a href="https://github.com/your-github" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a></li>
                 <li><a href="https://discordapp.com/users/1207719504310964247" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a></li>
                 <li>
-                    <!-- NEW CUSTOM ROBLOX ICON -->
+                    <!-- Correctly linking to your local file -->
                     <a href="https://www.roblox.com/users/4204242/profile" target="_blank" aria-label="Roblox">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzAwMDAwMCI+PHBhdGggZD0iTTEyIDBDNS4zNzMgMCAwIDUuMzczIDAgMTJzNS4zNzMgMTIgMTIgMTIgMTItNS4zNzMgMTItMTJTMTguNjI3IDAgMTIgMHptMCAyMi41QzYuMjAxIDIyLjUgMS41IDE3Ljc5OSAxLjUgMTJTNi4yMDEgMS41IDEyIDEuNXMyMC41IDQuNzAxIDEwLjUgMTAuNVMxNy43OTkgMjIuNSAxMiAyMi41ek0xNy4xNjcgNS4zMTJMNi44MzMgMTkuMTg4bDEuNjY3LTIuNzVMMTkuODMzIDQuODEyem0tMS42NjcgMS42NjdsLTIuMDgzLTMuMzM0TDguNzUgMTUuMjVMMTAuODMzIDE4LjU4NHoiLz48L3N2Zz4=" alt="Roblox Icon" class="custom-icon">
+                        <img src="roblox-icon.svg" alt="Roblox Icon" class="custom-icon">
                     </a>
                 </li>
             </ul>
@@ -68,45 +68,38 @@
                 }
             }, 150);
 
-            // --- PARTICLE EFFECT ---
-            // (Keeping this logic as it was)
+            // --- PARTICLE EFFECT (CODE WAS MISSING, NOW FIXED) ---
             const particleContainer = document.getElementById('particle-container');
-            function createParticle(type) { /* ... same as before ... */ }
-            // ...
+            function createParticle(type) {
+                const particle = document.createElement('div');
+                particle.classList.add(type);
+                particle.style.left = Math.random() * 100 + 'vw';
+                const duration = (type === 'snow') ? (Math.random() * 5 + 5) : (Math.random() * 0.5 + 0.5);
+                particle.style.animationDuration = duration + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particleContainer.appendChild(particle);
+                setTimeout(() => { particle.remove(); }, (duration + 5) * 1000);
+            }
+            setInterval(() => createParticle('rain'), 50);
+            setInterval(() => createParticle('snow'), 250);
 
-            // --- NEW: SCREENSAVER MOVEMENT LOGIC ---
+            // --- SCREENSAVER MOVEMENT (CODE WAS MISSING, NOW FIXED) ---
             let x = (window.innerWidth - card.offsetWidth) / 2;
             let y = (window.innerHeight - card.offsetHeight) / 2;
-            let dx = 0.5; // Horizontal speed
-            let dy = 0.5; // Vertical speed
+            let dx = 0.5;
+            let dy = 0.5;
             let isPaused = false;
-
+            
             function animate() {
                 if (!isPaused) {
-                    // Update position
-                    x += dx;
-                    y += dy;
-
-                    // Check for wall collisions and reverse direction
-                    if (x + card.offsetWidth > window.innerWidth || x < 0) {
-                        dx = -dx;
-                    }
-                    if (y + card.offsetHeight > window.innerHeight || y < 0) {
-                        dy = -dy;
-                    }
-
-                    // Apply the new position
+                    x += dx; y += dy;
+                    if (x + card.offsetWidth > window.innerWidth || x < 0) { dx = -dx; }
+                    if (y + card.offsetHeight > window.innerHeight || y < 0) { dy = -dy; }
                     card.style.transform = `translate(${x}px, ${y}px)`;
                 }
-                
-                // Request the next animation frame
                 requestAnimationFrame(animate);
             }
-
-            // Start the animation
             animate();
-
-            // Pause and resume on hover
             card.addEventListener('mouseenter', () => { isPaused = true; });
             card.addEventListener('mouseleave', () => { isPaused = false; });
         });
