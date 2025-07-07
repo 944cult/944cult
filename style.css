@@ -1,46 +1,73 @@
+/* --- Particle Effects (Rain & Snow) --- */
+#particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Sits between the video (-1) and the card (1) */
+    pointer-events: none; /* Allows clicks to go through to the video if needed */
+    overflow: hidden;
+}
+
+.rain, .snow {
+    position: absolute;
+    top: -20px; /* Start above the screen */
+    animation: fall linear infinite;
+}
+
+.rain {
+    width: 1px;
+    height: 15px;
+    background: linear-gradient(to bottom, rgba(230, 57, 70, 0), rgba(230, 57, 70, 0.8)); /* Faded red */
+}
+
+.snow {
+    width: 5px;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(105vh); /* Fall to just below the viewport */
+    }
+}
+
 /* --- Video Background --- */
 #background-video {
     position: fixed;
-    right: 0;
-    bottom: 0;
+    right: 0; bottom: 0;
     min-width: 100%;
     min-height: 100%;
     z-index: -1;
     object-fit: cover;
     opacity: 0;
-    /* SLOWER FADE-IN */
     transition: opacity 3s ease-in-out;
 }
 
-#background-video.video-fade-in {
-    opacity: 1;
-}
+#background-video.video-fade-in { opacity: 1; }
 
-/* --- THEME COLORS (NOW LIGHT MODE / RED) --- */
+/* --- THEME COLORS (CORRECTED) --- */
 :root {
-    --primary-color: #e63946; /* A strong red */
-    --card-bg: #FFFFFF;      /* White card */
-    --text-primary: #1D3557; /* Dark blue text */
-    --text-secondary: #457B9D; /* Lighter blue/gray text */
-    --border-color: #f1f1f1;   /* Light gray border */
+    --primary-color: #e63946;   /* Red */
+    --card-bg: #FFFFFF;         /* White */
+    --text-primary: #121212;    /* Near-black text */
+    --text-secondary: #5e5e5e;  /* Gray for secondary text/icons */
+    --border-color: #f1f1f1;
 }
 
 /* --- Base Setup --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* --- BACKGROUND FIX & CENTERING --- */
-/* The main problem was `display: flex` here, which put the video and card side-by-side. */
-/* Using `display: grid` is a modern way to perfectly center the card on top. */
 body {
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
     padding: 20px;
     display: grid;
-    place-items: center; /* This perfectly centers the .business-card */
+    place-items: center;
 }
 
 /* --- The Business Card --- */
@@ -48,102 +75,48 @@ body {
     background-color: var(--card-bg);
     color: var(--text-primary);
     border-radius: 16px;
-    border: 1px solid var(--border-color);
     padding: 35px;
     width: 100%;
     max-width: 380px;
     text-align: center;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    /* SLOWER FADE-IN */
+    /* NEW: Red glow effect */
+    box-shadow: 0 0 35px rgba(230, 57, 70, 0.35);
+    z-index: 1; /* Ensures card is on top of particles */
     animation: fadeIn 2.5s ease-out;
 }
 
-/* Card Header & Profile Pic */
-.card-header {
-    margin-bottom: 25px;
-}
-
+/* Profile Pic */
 .profile-pic {
-    width: 100px;
-    height: 100px;
+    width: 100px; height: 100px;
     border-radius: 50%;
     border: 3px solid var(--primary-color);
     object-fit: cover;
     margin-bottom: 15px;
-    box-shadow: 0 0 15px rgba(230, 57, 70, 0.3);
 }
 
-.name {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    line-height: 1.2;
-}
+.name { font-size: 1.8rem; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+.nickname { font-size: 1rem; font-weight: 400; color: var(--text-secondary); font-style: italic; }
 
-.nickname {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--text-secondary);
-    font-style: italic;
-}
-
-/* --- Primary Call to Action Button --- */
+/* Button */
 .cta-button {
-    display: block;
-    width: 100%;
-    padding: 15px;
+    display: block; width: 100%; padding: 15px;
     background-color: var(--primary-color);
-    color: #fff; /* Ensure text is white for contrast */
-    text-decoration: none;
-    font-size: 1.1rem;
-    font-weight: 600;
+    color: #fff;
+    text-decoration: none; font-size: 1.1rem; font-weight: 600;
     border-radius: 8px;
     transition: transform 0.2s ease, background-color 0.2s ease;
 }
-
-.cta-button:hover {
-    transform: scale(1.05);
-    background-color: #f7525f; /* Lighter red on hover */
-}
-
-.cta-button i {
-    margin-right: 10px;
-}
+.cta-button:hover { transform: scale(1.05); background-color: #f7525f; }
+.cta-button i { margin-right: 10px; }
 
 /* Divider & Social Links */
-.divider {
-    border: 0;
-    height: 1px;
-    background-color: var(--border-color);
-    margin: 30px 0;
-}
+.divider { border: 0; height: 1px; background-color: var(--border-color); margin: 30px 0; }
+.social-links ul { list-style: none; display: flex; justify-content: center; gap: 30px; }
+.social-links a { color: var(--text-secondary); font-size: 1.5rem; transition: color 0.2s ease, transform 0.2s ease; }
+.social-links a:hover { color: var(--primary-color); transform: translateY(-3px); }
 
-.social-links ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-}
-
-.social-links a {
-    color: var(--text-secondary);
-    font-size: 1.5rem;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.social-links a:hover {
-    color: var(--primary-color);
-    transform: translateY(-3px);
-}
-
-/* --- Fade In Animation --- */
+/* Animation */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
