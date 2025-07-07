@@ -92,7 +92,7 @@
             // Listen for the one-time click
             entryOverlay.addEventListener('click', startExperience, { once: true });
             
-            // --- Animation & Effect Functions ---
+            // --- Animation & Effect Functions (Cleaned and stable) ---
             function createParticle() {
                 const particle = document.createElement('div');
                 particle.className = 'snow';
@@ -123,8 +123,8 @@
                 ghost.style.height = card.offsetHeight + 'px';
                 ghost.style.transform = `translate(${x}px, ${y}px)`;
                 document.body.appendChild(ghost);
-                setTimeout(() => ghost.style.opacity = '0', 50);
-                setTimeout(() => ghost.remove(), 1000);
+                setTimeout(() => { ghost.style.opacity = '0'; }, 50);
+                setTimeout(() => { ghost.remove(); }, 1000);
             }
 
             function animate() {
