@@ -1,71 +1,43 @@
 /* --- Particle Effects (Bigger & Better Movement) --- */
 #particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: hidden; }
-
 .rain, .snow { position: absolute; top: -20px; }
-
 .rain {
-    width: 2px; /* Bigger */
-    height: 20px; /* Bigger */
+    width: 8px; /* 4x Bigger */
+    height: 80px; /* 4x Bigger */
     background: linear-gradient(to bottom, rgba(230, 57, 70, 0), rgba(230, 57, 70, 0.8));
     animation: fall linear infinite;
 }
-
 .snow {
-    width: 8px; /* Bigger */
-    height: 8px; /* Bigger */
+    width: 16px; /* 2x Bigger */
+    height: 16px; /* 2x Bigger */
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 50%;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-    animation: swayAndFall linear infinite; /* NEW drifting animation */
+    animation: swayAndFall linear infinite;
 }
-
-@keyframes fall {
-    to { transform: translateY(105vh); }
-}
-
-@keyframes swayAndFall {
-    0% { transform: translateY(-20px) translateX(0); }
-    50% { transform: translateX(80px); }
-    100% { transform: translateY(105vh) translateX(-80px); }
-}
+@keyframes fall { to { transform: translateY(105vh); } }
+@keyframes swayAndFall { 0% { transform: translateY(-20px) translateX(0); } 50% { transform: translateX(80px); } 100% { transform: translateY(105vh) translateX(-80px); } }
 
 /* --- Video Background --- */
 #background-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; opacity: 0; transition: opacity 3s ease-in-out; }
 #background-video.video-fade-in { opacity: 1; }
 
 /* --- Theme Colors (Black Text) --- */
-:root {
-    --primary-color: #e63946;   /* Red */
-    --card-bg: #FFFFFF;
-    --text-primary: #000000;    /* Black text */
-    --text-secondary: #000000;  /* Black icons/secondary text */
-    --border-color: #f1f1f1;
-}
+:root { --primary-color: #e63946; --card-bg: #FFFFFF; --text-primary: #000000; --text-secondary: #000000; --border-color: #f1f1f1; }
 
 /* --- Base Setup --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; min-height: 100vh; overflow: hidden; }
 
 /* --- Business Card (For Screensaver) --- */
-.business-card {
-    position: absolute; top: 0; left: 0;
-    background-color: var(--card-bg);
-    color: var(--text-primary);
-    border-radius: 16px;
-    padding: 35px;
-    width: 100%; max-width: 380px;
-    text-align: center;
-    box-shadow: 0 0 35px rgba(230, 57, 70, 0.35);
-    z-index: 1;
-    animation: fadeIn 2.5s ease-out;
-}
+.business-card { position: absolute; top: 0; left: 0; background-color: var(--card-bg); color: var(--text-primary); border-radius: 16px; padding: 35px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 0 35px rgba(230, 57, 70, 0.35); z-index: 1; animation: fadeIn 2.5s ease-out; }
 
-/* Profile Pic, Name, Nickname */
+/* Header (Nickname removed) */
+.card-header { margin-bottom: 25px; }
 .profile-pic { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary-color); object-fit: cover; margin-bottom: 15px; }
 .name { font-size: 1.8rem; font-weight: 700; line-height: 1.2; }
-.nickname { font-size: 1rem; font-weight: 400; font-style: italic; color: var(--text-secondary); }
 
-/* Button & New Link */
+/* Button & Link */
 .cta-button { display: block; width: 100%; padding: 15px; background-color: var(--primary-color); color: #fff; text-decoration: none; font-size: 1.1rem; font-weight: 600; border-radius: 8px; transition: transform 0.2s ease, background-color 0.2s ease; }
 .cta-button:hover { transform: scale(1.05); background-color: #f7525f; }
 .cta-button i { margin-right: 10px; }
@@ -75,11 +47,14 @@ body { font-family: 'Inter', sans-serif; min-height: 100vh; overflow: hidden; }
 /* Divider & Social Links */
 .divider { border: 0; height: 1px; background-color: var(--border-color); margin: 25px 0; }
 .social-links ul { list-style: none; display: flex; justify-content: center; gap: 30px; align-items: center; }
-.social-links a { color: var(--text-secondary); font-size: 1.5rem; transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
-.social-links a:hover, .social-links a:hover .custom-icon { color: var(--primary-color); transform: translateY(-3px); filter: invert(35%) sepia(87%) saturate(2474%) hue-rotate(335deg) brightness(94%) contrast(91%); }
+/* FIX: Removed underline from icon links */
+.social-links a { text-decoration: none; color: var(--text-secondary); font-size: 1.5rem; transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
+.social-links a:hover, .social-links a:hover .custom-icon { color: var(--primary-color); transform: translateY(-3px); }
+.social-links a:hover i { color: var(--primary-color); /* Ensure Font Awesome icons also turn red */ }
+.social-links a:hover .custom-icon { filter: invert(35%) sepia(87%) saturate(2474%) hue-rotate(335deg) brightness(94%) contrast(91%); }
 
 /* Custom icon styling */
-.custom-icon { width: 1.5rem; height: 1.5rem; transition: filter 0.2s ease; }
+.custom-icon { width: 1.5rem; height: 1.5rem; transition: filter 0.2s ease; fill: var(--text-secondary); }
 
 /* Animation */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
