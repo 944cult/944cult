@@ -7,14 +7,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Using a more recent Font Awesome version to ensure Roblox icon works -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- This div will hold our new rain and snow -->
+    <div id="particle-container"></div>
+    
     <video id="background-video" autoplay loop muted playsinline>
         <source src="background.mp4" type="video/mp4">
         Your browser does not support the video tag.
@@ -34,7 +34,7 @@
         <div class="social-links">
             <ul>
                 <li><a href="https://github.com/your-github" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a></li>
-                <li><a href="https://discordapp.com/users/1207719504310964247" target="_blank"aria-label="Discord"><i class="fab fa-discord"></i></a></li>
+                <li><a href="https://discordapp.com/users/1207719504310964247" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a></li>
                 <li><a href="https://www.roblox.com/users/4204242/profile" target="_blank" aria-label="Roblox"><i class="fab fa-roblox"></i></a></li>
             </ul>
         </div>
@@ -44,9 +44,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('background-video');
 
+            // --- AUDIO FIX & VISUAL FADE ---
+            video.muted = false; // THIS IS THE FIX. Unmute the video.
             video.classList.add('video-fade-in');
 
-            const targetVolume = 0.4; 
+            const targetVolume = 0.4;
             video.volume = 0;
 
             const fadeAudio = setInterval(() => {
@@ -55,7 +57,32 @@
                 } else {
                     clearInterval(fadeAudio);
                 }
-            }, 150); // SLOWER VOLUME FADE: Interval increased from 100 to 150ms
+            }, 150);
+
+            // --- RAIN & SNOW EFFECT ---
+            const particleContainer = document.getElementById('particle-container');
+            
+            function createParticle(type) {
+                const particle = document.createElement('div');
+                particle.classList.add(type); // 'rain' or 'snow'
+                
+                // Randomize horizontal position, duration, and delay
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's'; // Speed
+                particle.style.animationDelay = Math.random() * 5 + 's'; // Stagger start
+                
+                particleContainer.appendChild(particle);
+
+                // Remove particle after it falls to prevent clutter
+                setTimeout(() => {
+                    particle.remove();
+                }, 5000);
+            }
+
+            // Create a new raindrop every 50 milliseconds
+            setInterval(() => createParticle('rain'), 50);
+            // Create a new snowflake every 250 milliseconds
+            setInterval(() => createParticle('snow'), 250);
         });
     </script>
 
