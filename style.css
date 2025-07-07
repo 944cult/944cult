@@ -36,6 +36,13 @@ body { font-family: 'Inter', sans-serif; min-height: 100vh; overflow: hidden; ba
 }
 .business-card.visible { opacity: 1; }
 
+/* --- Custom Icon Styling --- */
+.custom-icon {
+    width: 1.5rem;   /* Matches the font-size of the other icons */
+    height: 1.5rem;  /* Matches the font-size of the other icons */
+    fill: currentColor; /* This is the key: it makes the SVG take the color of its parent link */
+}
+
 /* --- Profile Pic with Pure Red Glow --- */
 .card-header { margin-bottom: -10px; }
 .profile-pic {
