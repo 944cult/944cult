@@ -1,0 +1,128 @@
+/* --- Base Setup --- */
+:root {
+    --primary-color: #5865F2; /* Discord Blue */
+    --card-bg: #1A1A1A;
+    --body-bg: #111111;
+    --text-primary: #F0F0F0;
+    --text-secondary: #A0A0A0;
+    --border-color: #2C2C2C;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--body-bg);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="28" height="49" viewBox="0 0 28 49"%3E%3Cg fill-rule="evenodd"%3E%3Cg id="hexagons" fill="%231a1a1a" fill-opacity="0.4" fill-rule="nonzero"%3E%3Cpath d="M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.99-7.5L26 15v19L13 41.5 0 34V15z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+}
+
+/* --- The Business Card --- */
+.business-card {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 35px;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px #222;
+    animation: fadeIn 1s ease-out;
+}
+
+/* --- Card Header & Profile Pic --- */
+.card-header {
+    margin-bottom: 25px;
+}
+
+.profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+    object-fit: cover;
+    margin-bottom: 15px;
+    box-shadow: 0 0 15px rgba(88, 101, 242, 0.3);
+}
+
+.name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.tagline {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* --- Primary Call to Action Button (Discord) --- */
+.cta-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.cta-button:hover {
+    transform: scale(1.05);
+    background-color: #6370f3; /* Slightly lighter on hover */
+}
+
+.cta-button .fa-discord {
+    margin-right: 10px;
+}
+
+/* --- Divider & Social Links --- */
+.divider {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 30px 0;
+}
+
+.social-links ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 25px; /* Space between icons */
+}
+
+.social-links a {
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.social-links a:hover {
+    color: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+/* --- Fade In Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
