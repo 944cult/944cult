@@ -22,8 +22,8 @@
     <main class="business-card">
         <div class="card-header">
             <img src="profile.jpg" alt="Profile Picture" class="profile-pic">
+            <!-- Nickname has been removed -->
             <h1 class="name">944 cultist</h1>
-            <p class="nickname">(jerk)</p>
         </div>
         
         <a href="https://discord.gg/qD4mcpYmWa" target="_blank" rel="noopener noreferrer" class="cta-button">
@@ -31,8 +31,8 @@
             Join the cult
         </a>
         
-        <!-- Clickable link, now visible -->
-        <a href="#" class="secondary-link">haunt.gg/jerk</a>
+        <!-- FIX: Link is now functional and opens in a new tab -->
+        <a href="https://haunt.gg/jerk" target="_blank" rel="noopener noreferrer" class="secondary-link">haunt.gg/jerk</a>
 
         <hr class="divider">
         
@@ -41,9 +41,9 @@
                 <li><a href="https://github.com/your-github" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a></li>
                 <li><a href="https://discordapp.com/users/1207719504310964247" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a></li>
                 <li>
-                    <!-- Correctly linking to your local file -->
+                    <!-- Using a direct SVG embed for reliability -->
                     <a href="https://www.roblox.com/users/4204242/profile" target="_blank" aria-label="Roblox">
-                        <img src="roblox-icon.svg" alt="Roblox Icon" class="custom-icon">
+                        <svg class="custom-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22.5C6.201 22.5 1.5 17.799 1.5 12S6.201 1.5 12 1.5s10.5 4.701 10.5 10.5S17.799 22.5 12 22.5zM17.167 5.312L6.833 19.188l1.667-2.75L19.833 4.812zm-1.667 1.667l-2.083-3.334L8.75 15.25l2.083 3.334z"/></svg>
                     </a>
                 </li>
             </ul>
@@ -52,24 +52,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const video = document.getElementById('background-video');
-            const card = document.querySelector('.business-card');
-            
-            // --- VIDEO & AUDIO FADE ---
-            video.muted = false;
-            video.classList.add('video-fade-in');
-            const targetVolume = 0.4;
-            video.volume = 0;
-            const fadeAudio = setInterval(() => {
-                if (video.volume < targetVolume) {
-                    video.volume = Math.min(targetVolume, video.volume + 0.01);
-                } else {
-                    clearInterval(fadeAudio);
-                }
-            }, 150);
-
-            // --- PARTICLE EFFECT (CODE WAS MISSING, NOW FIXED) ---
             const particleContainer = document.getElementById('particle-container');
+            
+            // --- PARTICLE GENERATION LOGIC ---
             function createParticle(type) {
                 const particle = document.createElement('div');
                 particle.classList.add(type);
@@ -80,30 +65,34 @@
                 particleContainer.appendChild(particle);
                 setTimeout(() => { particle.remove(); }, (duration + 5) * 1000);
             }
-            setInterval(() => createParticle('rain'), 50);
-            setInterval(() => createParticle('snow'), 250);
+            // Initial particle generation
+            for(let i = 0; i < 100; i++) { createParticle('rain'); }
+            for(let i = 0; i < 20; i++) { createParticle('snow'); }
 
-            // --- SCREENSAVER MOVEMENT (CODE WAS MISSING, NOW FIXED) ---
-            let x = (window.innerWidth - card.offsetWidth) / 2;
-            let y = (window.innerHeight - card.offsetHeight) / 2;
-            let dx = 0.5;
-            let dy = 0.5;
-            let isPaused = false;
-            
-            function animate() {
-                if (!isPaused) {
-                    x += dx; y += dy;
-                    if (x + card.offsetWidth > window.innerWidth || x < 0) { dx = -dx; }
-                    if (y + card.offsetHeight > window.innerHeight || y < 0) { dy = -dy; }
-                    card.style.transform = `translate(${x}px, ${y}px)`;
+            // --- FIX: REPOPULATE PARTICLES WHEN TAB IS VISIBLE AGAIN ---
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden === false) {
+                    particleContainer.innerHTML = ''; // Clear old, frozen particles
+                    // Blast the screen with new particles to make it look like it never stopped
+                    for(let i = 0; i < 100; i++) { createParticle('rain'); }
+                    for(let i = 0; i < 20; i++) { createParticle('snow'); }
                 }
-                requestAnimationFrame(animate);
-            }
+            });
+
+            // (The rest of the script for video and screensaver remains the same)
+            const video = document.getElementById('background-video');
+            const card = document.querySelector('.business-card');
+            video.muted = false;
+            video.classList.add('video-fade-in');
+            const targetVolume = 0.4;
+            video.volume = 0;
+            const fadeAudio = setInterval(() => { if (video.volume < targetVolume) { video.volume = Math.min(targetVolume, video.volume + 0.01); } else { clearInterval(fadeAudio); } }, 150);
+            let x = (window.innerWidth - card.offsetWidth) / 2; let y = (window.innerHeight - card.offsetHeight) / 2; let dx = 0.5; let dy = 0.5; let isPaused = false;
+            function animate() { if (!isPaused) { x += dx; y += dy; if (x + card.offsetWidth > window.innerWidth || x < 0) { dx = -dx; } if (y + card.offsetHeight > window.innerHeight || y < 0) { dy = -dy; } card.style.transform = `translate(${x}px, ${y}px)`; } requestAnimationFrame(animate); }
             animate();
             card.addEventListener('mouseenter', () => { isPaused = true; });
             card.addEventListener('mouseleave', () => { isPaused = false; });
         });
     </script>
-
 </body>
 </html>
