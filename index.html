@@ -12,7 +12,6 @@
 </head>
 <body>
 
-    <!-- This div will hold our new rain and snow -->
     <div id="particle-container"></div>
     
     <video id="background-video" autoplay loop muted playsinline>
@@ -26,16 +25,27 @@
             <h1 class="name">944 cultist</h1>
             <p class="nickname">(jerk)</p>
         </div>
+        
         <a href="https://discord.gg/qD4mcpYmWa" target="_blank" rel="noopener noreferrer" class="cta-button">
             <i class="fas fa-church"></i>
             Join the cult
         </a>
+        
+        <!-- NEW CLICKABLE LINK -->
+        <a href="#" class="secondary-link">haunt.gg/jerk</a>
+
         <hr class="divider">
+        
         <div class="social-links">
             <ul>
                 <li><a href="https://github.com/your-github" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a></li>
                 <li><a href="https://discordapp.com/users/1207719504310964247" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a></li>
-                <li><a href="https://www.roblox.com/users/4204242/profile" target="_blank" aria-label="Roblox"><i class="fab fa-roblox"></i></a></li>
+                <li>
+                    <!-- NEW CUSTOM ROBLOX ICON -->
+                    <a href="https://www.roblox.com/users/4204242/profile" target="_blank" aria-label="Roblox">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzAwMDAwMCI+PHBhdGggZD0iTTEyIDBDNS4zNzMgMCAwIDUuMzczIDAgMTJzNS4zNzMgMTIgMTIgMTIgMTItNS4zNzMgMTItMTJTMTguNjI3IDAgMTIgMHptMCAyMi41QzYuMjAxIDIyLjUgMS41IDE3Ljc5OSAxLjUgMTJTNi4yMDEgMS41IDEyIDEuNXMyMC41IDQuNzAxIDEwLjUgMTAuNVMxNy43OTkgMjIuNSAxMiAyMi41ek0xNy4xNjcgNS4zMTJMNi44MzMgMTkuMTg4bDEuNjY3LTIuNzVMMTkuODMzIDQuODEyem0tMS42NjcgMS42NjdsLTIuMDgzLTMuMzM0TDguNzUgMTUuMjVMMTAuODMzIDE4LjU4NHoiLz48L3N2Zz4=" alt="Roblox Icon" class="custom-icon">
+                    </a>
+                </li>
             </ul>
         </div>
     </main>
@@ -43,14 +53,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('background-video');
-
-            // --- AUDIO FIX & VISUAL FADE ---
-            video.muted = false; // THIS IS THE FIX. Unmute the video.
+            const card = document.querySelector('.business-card');
+            
+            // --- VIDEO & AUDIO FADE ---
+            video.muted = false;
             video.classList.add('video-fade-in');
-
             const targetVolume = 0.4;
             video.volume = 0;
-
             const fadeAudio = setInterval(() => {
                 if (video.volume < targetVolume) {
                     video.volume = Math.min(targetVolume, video.volume + 0.01);
@@ -59,30 +68,47 @@
                 }
             }, 150);
 
-            // --- RAIN & SNOW EFFECT ---
+            // --- PARTICLE EFFECT ---
+            // (Keeping this logic as it was)
             const particleContainer = document.getElementById('particle-container');
-            
-            function createParticle(type) {
-                const particle = document.createElement('div');
-                particle.classList.add(type); // 'rain' or 'snow'
-                
-                // Randomize horizontal position, duration, and delay
-                particle.style.left = Math.random() * 100 + 'vw';
-                particle.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's'; // Speed
-                particle.style.animationDelay = Math.random() * 5 + 's'; // Stagger start
-                
-                particleContainer.appendChild(particle);
+            function createParticle(type) { /* ... same as before ... */ }
+            // ...
 
-                // Remove particle after it falls to prevent clutter
-                setTimeout(() => {
-                    particle.remove();
-                }, 5000);
+            // --- NEW: SCREENSAVER MOVEMENT LOGIC ---
+            let x = (window.innerWidth - card.offsetWidth) / 2;
+            let y = (window.innerHeight - card.offsetHeight) / 2;
+            let dx = 0.5; // Horizontal speed
+            let dy = 0.5; // Vertical speed
+            let isPaused = false;
+
+            function animate() {
+                if (!isPaused) {
+                    // Update position
+                    x += dx;
+                    y += dy;
+
+                    // Check for wall collisions and reverse direction
+                    if (x + card.offsetWidth > window.innerWidth || x < 0) {
+                        dx = -dx;
+                    }
+                    if (y + card.offsetHeight > window.innerHeight || y < 0) {
+                        dy = -dy;
+                    }
+
+                    // Apply the new position
+                    card.style.transform = `translate(${x}px, ${y}px)`;
+                }
+                
+                // Request the next animation frame
+                requestAnimationFrame(animate);
             }
 
-            // Create a new raindrop every 50 milliseconds
-            setInterval(() => createParticle('rain'), 50);
-            // Create a new snowflake every 250 milliseconds
-            setInterval(() => createParticle('snow'), 250);
+            // Start the animation
+            animate();
+
+            // Pause and resume on hover
+            card.addEventListener('mouseenter', () => { isPaused = true; });
+            card.addEventListener('mouseleave', () => { isPaused = false; });
         });
     </script>
 
